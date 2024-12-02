@@ -8,20 +8,27 @@
     "noEmit": true,
     "esModuleInterop": true,
     "module": "esnext",
-    "moduleResolution": "bundler",
+    "moduleResolution": "node",  // Resolves modules like Node.js
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve",
-    "incremental": true,
+    "jsx": "preserve",            // Needed for JSX processing in Next.js
+    "incremental": true,          // Speeds up TypeScript recompilation
     "plugins": [
       {
-        "name": "next"
+        "name": "next"           // Ensures Next.js-specific TypeScript features are supported
       }
     ],
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./*"]              // Alias to shorten import paths
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
+  "include": [
+    "next-env.d.ts",              // Ensures Next.js types are included
+    "**/*.ts",                    // Includes all .ts files
+    "**/*.tsx",                   // Includes all .tsx files (React + TypeScript)
+    ".next/types/**/*.ts"         // Next.js types generated during builds
+  ],
+  "exclude": [
+    "node_modules"                // Avoid processing node modules
+  ]
 }
