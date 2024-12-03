@@ -68,7 +68,7 @@ export default function ApplyForm() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
+        setIsLoading(true);
         try {
             const response = await fetch('/api/forms', {
                 method: 'POST',
@@ -87,7 +87,7 @@ export default function ApplyForm() {
         } catch (error) {
             console.error('Error submitting form:', error);
         }
-
+        setIsLoading(true);
     };
 
     return (

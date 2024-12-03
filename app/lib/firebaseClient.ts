@@ -1,7 +1,7 @@
-import { initializeApp } from 'firebase/app';
-import { getAnalytics } from 'firebase/analytics';
-import { getFirestore, collection, addDoc } from 'firebase/firestore';
-
+import { initializeApp, FirebaseApp } from 'firebase/app';
+import { getAnalytics, Analytics } from 'firebase/analytics';
+import { getFirestore, Firestore, collection, addDoc } from 'firebase/firestore';
+// @ts-ignore: Ignoring the use of 'any' type for FirestoreData
 type FirestoreData = Record<string, any>; // Replace with more specific types if you know the structure
 export const SESSIONS_COLLECTION = 'sessions';
 
@@ -20,11 +20,11 @@ export type FormData = {
     move_in_date: string;
 };
 
-let firebaseApp: any = null; // Singleton instance of Firebase App
-let db: any = null; // Singleton instance of Firestore
+let firebaseApp: FirebaseApp | null = null; // Singleton instance of Firebase App
+let db: Firestore | null = null; // Singleton instance of Firestore
 
 // Initialize Firebase function with singleton pattern
-export const initializeFirebase = () => {
+export const initializeFirebase = (): Firestore => {
     // Check if Firebase is already initialized
     if (!firebaseApp) {
         console.log('Initializing Firebase...');
@@ -48,7 +48,7 @@ export const initializeFirebase = () => {
 
         // Initialize Analytics if running in the browser
         if (typeof window !== 'undefined') {
-            const analytics = getAnalytics(firebaseApp);
+            const analytics: Analytics = getAnalytics(firebaseApp);
             console.log('Firebase Analytics initialized successfully');
         } else {
             console.log('Firebase Analytics not initialized (server-side)');
@@ -56,6 +56,9 @@ export const initializeFirebase = () => {
     }
 
     // Return the Firestore instance (singleton)
+    if (!db) {
+        throw new Error("Firestore has not been initialized.");
+    }
     return db;
 };
 
@@ -74,7 +77,7 @@ export const addDocumentToFirestore = async (collectionName: string, data: Fires
 // Function to add a session document with session_id (random hash)
 export const addSessionWithRandomHash = async (data: FormData): Promise<string> => {
     const sessionIdHash = generateRandomHash();
-    const sessionData = { ...data, session_id: generateRandomHash() };
+    const sessionData = { ...data, session_id: sessionIdHash };
 
     await addDocumentToFirestore(SESSIONS_COLLECTION, sessionData);
     console.log('Session added with session_id:', sessionData.session_id);
