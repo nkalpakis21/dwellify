@@ -1,4 +1,6 @@
 
+
+// **** NOT USED RIGHT NOW
 import { NextRequest, NextResponse } from 'next/server';
 import stripe from '../../../lib/stripe'
 export async function POST(req: NextRequest) {
@@ -6,8 +8,6 @@ export async function POST(req: NextRequest) {
   const cancel_url = `${process.env.BASE_URL}/payment`;
 
   try {
-    // Extracting the request body
-
     const SCHEDULE_AMOUNT = 500
     // Create Stripe Checkout session
     const session = await stripe.checkout.sessions.create({
