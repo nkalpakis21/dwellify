@@ -1,6 +1,6 @@
 import { initializeApp, FirebaseApp } from 'firebase/app';
 import { getFirestore, Firestore, collection, addDoc } from 'firebase/firestore';
-// @ts-ignore: Ignoring the use of 'any' type for FirestoreData
+
 export const SESSIONS_COLLECTION = 'sessions';
 
 export type FormData = {
