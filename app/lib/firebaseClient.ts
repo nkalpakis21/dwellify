@@ -1,8 +1,6 @@
 import { initializeApp, FirebaseApp } from 'firebase/app';
-import { getAnalytics, Analytics } from 'firebase/analytics';
 import { getFirestore, Firestore, collection, addDoc } from 'firebase/firestore';
 // @ts-ignore: Ignoring the use of 'any' type for FirestoreData
-type FirestoreData = Record<string, any>; // Replace with more specific types if you know the structure
 export const SESSIONS_COLLECTION = 'sessions';
 
 export type FormData = {
@@ -19,6 +17,24 @@ export type FormData = {
     criminal_record_status: string;
     move_in_date: string;
 };
+
+export type FormDataModel = {
+    full_name: string;
+    email: string;
+    phone_number: string;
+    employer_name: string;
+    current_rent: number;
+    reason_for_moving: string;
+    monthly_income: number;
+    current_address: string;
+    credit_check_passed: boolean;
+    evicted_status: string;
+    criminal_record_status: string;
+    move_in_date: string;
+    session_id: string;
+}
+
+type FirestoreData = Record<string, unknown>; // Replace with more specific types if you know the structure
 
 let firebaseApp: FirebaseApp | null = null; // Singleton instance of Firebase App
 let db: Firestore | null = null; // Singleton instance of Firestore
