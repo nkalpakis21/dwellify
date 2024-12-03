@@ -24,7 +24,7 @@ export async function POST(request: Request) {
                   price_data: {
                     currency: 'usd',
                     product_data: {
-                      name: 'Schedule Viewing',
+                      name: '1130 S Side Ave Pittsburgh, PA 15212',
                     },
                     unit_amount: SCHEDULE_AMOUNT, // Amount in cents
                   },
