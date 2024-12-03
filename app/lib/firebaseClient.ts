@@ -48,7 +48,7 @@ export const initializeFirebase = (): Firestore => {
 
         // Initialize Analytics if running in the browser
         if (typeof window !== 'undefined') {
-            const analytics: Analytics = getAnalytics(firebaseApp);
+            // const analytics: Analytics = getAnalytics(firebaseApp);
             console.log('Firebase Analytics initialized successfully');
         } else {
             console.log('Firebase Analytics not initialized (server-side)');
