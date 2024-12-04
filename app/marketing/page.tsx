@@ -7,7 +7,7 @@ export default function MarketingPage() {
   return (
     <div className="min-h-screen">
       <main>
-        <section className="relative h-[600px] bg-gradient-to-r from-[#5271FF] to-[#8946FF] flex items-center justify-center">
+        <section className="relative h-[400px] bg-gradient-to-r from-[#5271FF] to-[#8946FF] flex items-center justify-center">
           <div className="text-center text-white space-y-6 px-4">
             <h1 className="text-5xl font-bold mb-4">Showcase Your Property to High-Intent Buyers</h1>
             <p className="text-xl mb-8 max-w-2xl mx-auto">Get paid for property viewings and only deal with serious prospects</p>
