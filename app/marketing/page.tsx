@@ -92,7 +92,7 @@ export default function MarketingPage() {
           </section>
 
           <section className="text-center bg-gradient-to-r from-[#5271FF] to-[#8946FF] text-white p-16 rounded-2xl">
-            <h2 className="text-3xl font-bold mb-4">Ready to Maximize Your Property's Potential?</h2>
+            <h2 className="text-3xl font-bold mb-4">Ready to Maximize Your Property\'s Potential?</h2>
             <p className="text-xl mb-8">Join Dwellify today and start connecting with serious buyers.</p>
             <Button 
               size="lg" 
