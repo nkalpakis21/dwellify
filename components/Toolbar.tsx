@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { Home } from 'lucide-react'
+import { Button } from './ui/button'
 
 // Version 1: Simple centered toolbar
 export function Toolbar1() {
@@ -100,6 +101,31 @@ export function ToolbarCombined() {
         </nav>
       </div>
     </header>
+  )
+}
+
+export function Toolbar6() {
+  return (
+    <header className="container mx-auto px-4 py-6">
+        <nav className="flex justify-between items-center">
+          <Link href="/" className="text-2xl font-bold text-[#5271FF] flex items-center gap-2">
+            <Home className="h-6 w-6" />
+            Dwellify
+          </Link>
+          <div className="flex items-center gap-6">
+            <Link href="/photos" className="text-[#5271FF] hover:text-[#5271FF]/90">
+              Photos
+            </Link>
+            <Button 
+              className="bg-white text-[#5271FF] hover:bg-white/90"
+              variant="ghost"
+              asChild
+            >
+              <Link href="/signup">Get Started</Link>
+            </Button>
+          </div>
+        </nav>
+      </header>
   )
 }
 
