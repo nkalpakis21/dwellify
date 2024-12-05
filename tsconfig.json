@@ -27,7 +27,7 @@
     "**/*.ts",                    // Includes all .ts files
     "**/*.tsx",                   // Includes all .tsx files (React + TypeScript)
     ".next/types/**/*.ts"         // Next.js types generated during builds
-  ],
+, "app/api/auth/[...nextauth].js"  ],
   "exclude": [
     "node_modules"                // Avoid processing node modules
   ]
