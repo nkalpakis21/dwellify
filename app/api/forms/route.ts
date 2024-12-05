@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { addSessionWithRandomHash, FormData } from '../../lib/firebaseClient'; // Make sure the path to your firebase functions is correct
+import { addSessionWithRandomHash } from '../../lib/firestoreClient'; // Make sure the path to your firebase functions is correct
 import stripe from '../../lib/stripe'
 
 export async function POST(request: Request) {

@@ -1,8 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '../lib/AuthContext';
-import { loginWithEmail } from '../lib/firebaseClient';
+import { loginWithEmail } from '../lib/authClient';
 
 
 export default function Login() {
@@ -17,6 +16,7 @@ export default function Login() {
       await loginWithEmail(email, password);
       router.push('/dashboard'); // Redirect after login
     } catch (err) {
+      console.error(err);
       setError('Invalid credentials');
     }
   };

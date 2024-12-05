@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { registerWithEmail } from '../lib/firebaseClient';
+import { registerWithEmail } from '../lib/authClient';
 
 export default function Signup() {
   const [email, setEmail] = useState('');
@@ -15,6 +15,7 @@ export default function Signup() {
       await registerWithEmail(email, password);
       router.push('/dashboard'); // Redirect after signup
     } catch (err) {
+      console.error(err);
       setError('Failed to register');
     }
   };
