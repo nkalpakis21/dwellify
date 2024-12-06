@@ -6,10 +6,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Label } from "@/components/ui/label"
 import { useAuth } from '@/app/lib/AuthContext'
 import { fetcher } from '@/app/lib/fetch'
-import { ApplicationList } from '@/components/dashboard/application/application-list'
 import { DashboardHeader } from '@/components/dashboard/header'
 import { IProperty } from '@/app/types/property'
 import { IApplication } from '@/app/types/application'
+import { ApplicationList } from '@/components/dashboard/application/application-list'
 
 export default function ApplicationsPage() {
   const { user } = useAuth();
