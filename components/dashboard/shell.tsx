@@ -9,7 +9,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet"
-import { Home, Building, FileText, DollarSign, Settings, LogOut } from 'lucide-react'
+import { Home, Building, FileText, DollarSign, LogOut } from 'lucide-react'
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { logout } from '@/app/lib/authClient'
