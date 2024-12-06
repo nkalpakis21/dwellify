@@ -1,13 +1,15 @@
-'use client';
-import { useAuth } from '../lib/AuthContext';
+import { DashboardHeader } from "@/components/dashboard/header";
+import { DashboardOverview } from "@/components/dashboard/overview";
 
-export default function Dashboard() {
-    const {user} = useAuth();
-    console.log(user);
-
+export default function DashboardPage() {
   return (
-    <div>
-      <h1>dashboard</h1>
-    </div>
-  );
+    <>
+      <DashboardHeader 
+        heading="Dashboard" 
+        text="Welcome to your Dwellify dashboard"
+      />
+      <DashboardOverview />
+    </>
+  )
 }
+

@@ -3,8 +3,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '../lib/AuthContext';
-import { logout } from '../lib/firebaseClient';
-
+import { logout } from '../lib/authClient';
 
 const LogoutPage = () => {
   const router = useRouter();

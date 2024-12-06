@@ -1,7 +1,7 @@
 'use client'; // This is a client-side component, because we're using hooks
 
 import './globals.css'
-import type { Metadata } from 'next'
+// import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import { ToolbarCombined } from '@/components/Toolbar'
 import { AuthProvider } from './lib/AuthContext';

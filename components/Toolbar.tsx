@@ -1,131 +1,90 @@
-import Link from 'next/link'
-import { Home } from 'lucide-react'
-import { Button } from './ui/button'
+"use client"
 
-// Version 1: Simple centered toolbar
-export function Toolbar1() {
-  return (
-    <header className="bg-white shadow-md">
-      <div className="container mx-auto px-4 py-3 flex items-center justify-center">
-        <Link href="/" className="flex items-center space-x-2">
-          <Home className="h-6 w-6 text-blue-600" />
-          <span className="text-xl font-bold text-blue-600">Dwellify</span>
-        </Link>
-      </div>
-    </header>
-  )
-}
+import Link from "next/link"
+import { Building, DollarSign, FileText, Home, Menu } from 'lucide-react'
+import { usePathname } from "next/navigation"
+import { Button } from "@/components/ui/button"
+import {
+  Sheet,
+  SheetTrigger,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet"
+import { cn } from "@/app/lib/utils"
 
-// Version 2: Left-aligned with gradient background
-export function Toolbar2() {
-  return (
-    <header className="bg-gradient-to-r from-blue-500 to-purple-600 text-white">
-      <div className="container mx-auto px-4 py-3 flex items-center">
-        <Link href="/" className="flex items-center space-x-2">
-          <Home className="h-6 w-6" />
-          <span className="text-xl font-bold">Dwellify</span>
-        </Link>
-      </div>
-    </header>
-  )
-}
-
-// Version 3: Centered with custom logo
-export function Toolbar3() {
-  return (
-    <header className="bg-gray-100">
-      <div className="container mx-auto px-4 py-3 flex items-center justify-center">
-        <Link href="/" className="flex flex-col items-center">
-          <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
-            <Home className="h-6 w-6 text-white" />
-          </div>
-          <span className="text-lg font-semibold text-gray-800 mt-1">Dwellify</span>
-        </Link>
-      </div>
-    </header>
-  )
-}
-
-// Version 4: Full-width with subtle border
-export function Toolbar4() {
-  return (
-    <header className="bg-white border-b border-gray-200">
-      <div className="container mx-auto px-4 py-3 flex items-center justify-between">
-        <Link href="/" className="flex items-center space-x-2">
-          <Home className="h-6 w-6 text-blue-600" />
-          <span className="text-xl font-bold text-gray-800">Dwellify</span>
-        </Link>
-        <nav>
-          <ul className="flex space-x-4">
-            <li><Link href="/about" className="text-gray-600 hover:text-blue-600">About</Link></li>
-            <li><Link href="/contact" className="text-gray-600 hover:text-blue-600">Contact</Link></li>
-          </ul>
-        </nav>
-      </div>
-    </header>
-  )
-}
-
-// Version 5: Minimalist with animated hover effect
-export function Toolbar5() {
-  return (
-    <header className="bg-white">
-      <div className="container mx-auto px-4 py-3 flex items-center justify-center">
-        <Link href="/" className="group flex items-center space-x-2">
-          <div className="relative">
-            <Home className="h-6 w-6 text-gray-400 group-hover:text-blue-600 transition-colors duration-300" />
-            <div className="absolute inset-0 bg-blue-100 scale-0 group-hover:scale-150 rounded-full transition-transform duration-300"></div>
-          </div>
-          <span className="text-xl font-bold text-gray-800 group-hover:text-blue-600 transition-colors duration-300">Dwellify</span>
-        </Link>
-      </div>
-    </header>
-  )
-}
-
-// Combined version: Positioning from Toolbar4 with colors from Toolbar1
 export function ToolbarCombined() {
+  const pathname = usePathname()
+  const isDashboard = pathname?.startsWith('/dashboard')
+
+  const navigation = [
+    { name: 'Dashboard', href: '/dashboard', icon: Home },
+    { name: 'Properties', href: '/dashboard/properties', icon: Building },
+    { name: 'Applications', href: '/dashboard/applications', icon: FileText },
+    { name: 'Revenue', href: '/dashboard/revenue', icon: DollarSign },
+  ]
+
   return (
     <header className="bg-white border-b border-gray-200">
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
-        <Link href="/" className="flex items-center space-x-2">
-          <Home className="h-6 w-6 text-blue-600" />
-          <span className="text-xl font-bold text-blue-600">Dwellify</span>
-        </Link>
+        <div className="flex items-center gap-2">
+          {isDashboard && (
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="icon" className="md:hidden">
+                  <Menu className="h-5 w-5" />
+                  <span className="sr-only">Open sidebar</span>
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="left" className="w-72 p-0">
+                <SheetHeader className="border-b p-4">
+                  <SheetTitle>
+                    <Link href="/dashboard" className="flex items-center gap-2">
+                      <Home className="h-6 w-6 text-blue-600" />
+                      <span className="text-xl font-bold text-blue-600">Dwellify</span>
+                    </Link>
+                  </SheetTitle>
+                </SheetHeader>
+                <div className="flex flex-col gap-4 py-4">
+                  <nav className="space-y-1 px-2">
+                    {navigation.map((item) => {
+                      const isActive = pathname === item.href
+                      return (
+                        <Link
+                          key={item.name}
+                          href={item.href}
+                          className={cn(
+                            "flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground",
+                            isActive ? "bg-accent text-accent-foreground" : "text-muted-foreground"
+                          )}
+                        >
+                          <item.icon className="h-4 w-4" />
+                          {item.name}
+                        </Link>
+                      )
+                    })}
+                  </nav>
+                </div>
+              </SheetContent>
+            </Sheet>
+          )}
+          <Link href={isDashboard ? "/dashboard" : "/"} className="flex items-center space-x-2">
+            <Home className="h-6 w-6 text-blue-600" />
+            <span className="text-xl font-bold text-blue-600">Dwellify</span>
+          </Link>
+        </div>
         <nav>
           <ul className="flex space-x-4">
-            <li><Link href="/photos" className="text-blue-600 hover:text-blue-800">Photos</Link></li>
-            {/* <li><Link href="/about" className="text-blue-600 hover:text-blue-800">About</Link></li> */}
-            <li><Link href="/contact" className="text-blue-600 hover:text-blue-800">Contact</Link></li>
+            {!isDashboard && (
+              <>
+                <li><Link href="/photos" className="text-blue-600 hover:text-blue-800">Photos</Link></li>
+                <li><Link href="/contact" className="text-blue-600 hover:text-blue-800">Contact</Link></li>
+              </>
+            )}
           </ul>
         </nav>
       </div>
     </header>
-  )
-}
-
-export function Toolbar6() {
-  return (
-    <header className="container mx-auto px-4 py-6">
-        <nav className="flex justify-between items-center">
-          <Link href="/" className="text-2xl font-bold text-[#5271FF] flex items-center gap-2">
-            <Home className="h-6 w-6" />
-            Dwellify
-          </Link>
-          <div className="flex items-center gap-6">
-            <Link href="/photos" className="text-[#5271FF] hover:text-[#5271FF]/90">
-              Photos
-            </Link>
-            <Button 
-              className="bg-white text-[#5271FF] hover:bg-white/90"
-              variant="ghost"
-              asChild
-            >
-              <Link href="/signup">Get Started</Link>
-            </Button>
-          </div>
-        </nav>
-      </header>
   )
 }
 
