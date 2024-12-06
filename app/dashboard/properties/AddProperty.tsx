@@ -33,7 +33,7 @@ export function AddPropertyForm({ onSuccess }: AddPropertyFormProps) {
           headers: {
               'Content-Type': 'application/json',
           },
-          body: JSON.stringify({...data, userId: uid}),
+          body: JSON.stringify({...data, listedBy: uid}),
       });
 
       if (!response.ok) {

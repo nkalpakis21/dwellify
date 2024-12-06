@@ -1,6 +1,6 @@
 // firestoreClient.ts
-import { collection, addDoc } from 'firebase/firestore';
-import { IPropertyForm } from '../types/property';
+import { collection, addDoc, getDocs, query, where } from 'firebase/firestore';
+import { IProperty, IPropertyFormRequest } from '../types/property';
 import { initializeFirebase } from './firebaseClient';
 import { serverTimestamp } from 'firebase/firestore'
 
@@ -30,11 +30,39 @@ export const addSessionWithRandomHash = async (data: FormData): Promise<string> 
     return sessionIdHash;
 };
 
-export const addProperty = async (data: IPropertyForm): Promise<void> => {
+export const addProperty = async (data: IPropertyFormRequest): Promise<void> => {
     const propertyData = {...data, price: Number(data.price),
-        listedBy: 'userId', // Replace with actual user ID when auth is implemented
         images: [] // Add image upload functionality later
     }
     await addDocumentToFirestore(PROPERTIES_COLLECTION, propertyData);
     return;
+};
+
+// Function to get all properties by userId
+export const getPropertiesByUser = async (userId: string): Promise<IProperty[]> => {
+    const { db } = initializeFirebase();
+    try {
+        // Query Firestore to get properties where userId matches
+        const propertiesRef = collection(db, PROPERTIES_COLLECTION);
+        const q = query(propertiesRef, where('listedBy', '==', userId)); // Replace 'userId' with 'listedBy' for consistency
+        const querySnapshot = await getDocs(q);
+
+        // Check if there are any documents
+        if (querySnapshot.empty) {
+            return [];
+        }
+
+        // Map the documents to an array of properties
+        const properties: IProperty[] = querySnapshot.docs.map((doc) => {
+            return {
+                id: doc.id,
+                ...doc.data(),
+            } as unknown as IProperty; // Assuming the document data matches your IProperty structure
+        });
+
+        return properties;
+    } catch (error) {
+        console.error('Error getting properties by userId:', error);
+        throw new Error('Failed to retrieve properties');
+    }
 };
