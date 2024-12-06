@@ -2,6 +2,9 @@ import { getPropertiesByUser } from "@/app/lib/firestoreClient";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest, { params }: { params: Promise<{ userId: string }> }) {
+    if (req.method !== 'GET') {
+        return NextResponse.json({ error: 'Method not allowed' }, { status: 405 });
+      }
     const { userId } = await params;
 
     if (!userId) {
