@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from 'react'
 import { cn } from "@/app/lib/utils"
 import { Button } from "@/components/ui/button"
 import {
@@ -10,7 +11,8 @@ import {
 } from "@/components/ui/sheet"
 import { Home, Building, FileText, DollarSign, Settings, LogOut } from 'lucide-react'
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
+import { logout } from '@/app/lib/authClient'
 
 export function DashboardShell({
   children
@@ -18,6 +20,8 @@ export function DashboardShell({
   children: React.ReactNode
 }) {
   const pathname = usePathname()
+  const router = useRouter()
+  const [isLoggingOut, setIsLoggingOut] = useState(false)
 
   const navigation = [
     { name: 'Dashboard', href: '/dashboard', icon: Home },
@@ -25,6 +29,19 @@ export function DashboardShell({
     { name: 'Applications', href: '/dashboard/applications', icon: FileText },
     { name: 'Revenue', href: '/dashboard/revenue', icon: DollarSign },
   ]
+
+  const handleLogout = async () => {
+    setIsLoggingOut(true)
+    try {
+      await logout()
+      router.push('/login') // Redirect to login page after successful logout
+    } catch (error) {
+      console.error('Logout failed:', error)
+      // You might want to show an error message to the user here
+    } finally {
+      setIsLoggingOut(false)
+    }
+  }
 
   return (
     <div className="flex min-h-screen">
@@ -56,16 +73,14 @@ export function DashboardShell({
             })}
           </nav>
           <div className="border-t pt-4">
-            {/* TODO add settings page */}
-            {/* <Button variant="ghost" className="w-full justify-start" asChild>
-              <Link href="/dashboard/settings">
-                <Settings className="mr-2 h-4 w-4" />
-                Settings
-              </Link>
-            </Button> */}
-            <Button variant="ghost" className="w-full justify-start text-red-500">
+            <Button 
+              variant="ghost" 
+              className="w-full justify-start text-red-500"
+              onClick={handleLogout}
+              disabled={isLoggingOut}
+            >
               <LogOut className="mr-2 h-4 w-4" />
-              Logout
+              {isLoggingOut ? 'Logging out...' : 'Logout'}
             </Button>
           </div>
         </div>
@@ -102,15 +117,14 @@ export function DashboardShell({
               })}
             </nav>
             <div className="border-t px-2 pt-4">
-              <Button variant="ghost" className="w-full justify-start" asChild>
-                <Link href="/dashboard/settings">
-                  <Settings className="mr-2 h-4 w-4" />
-                  Settings
-                </Link>
-              </Button>
-              <Button variant="ghost" className="w-full justify-start text-red-500">
+              <Button 
+                variant="ghost" 
+                className="w-full justify-start text-red-500"
+                onClick={handleLogout}
+                disabled={isLoggingOut}
+              >
                 <LogOut className="mr-2 h-4 w-4" />
-                Logout
+                {isLoggingOut ? 'Logging out...' : 'Logout'}
               </Button>
             </div>
           </div>
