@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from 'react'
-import { collection, getDocs } from 'firebase/firestore'
+// import { collection, getDocs } from 'firebase/firestore'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Building, DollarSign } from 'lucide-react'
@@ -22,17 +22,17 @@ export function PropertyList() {
   const {db} = initializeFirebase();
   
   useEffect(() => {
-    const fetchProperties = async () => {
-      const querySnapshot = await getDocs(collection(db, 'properties'))
-      const propertiesData = querySnapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      })) as Property[]
-      setProperties(propertiesData)
-      setLoading(false)
-    }
+    // const fetchProperties = async () => {
+    //   const querySnapshot = await getDocs(collection(db, 'properties'))
+    //   const propertiesData = querySnapshot.docs.map(doc => ({
+    //     id: doc.id,
+    //     ...doc.data()
+    //   })) as Property[]
+    //   setProperties(propertiesData)
+    //   setLoading(false)
+    // }
 
-    fetchProperties()
+    // fetchProperties()
   }, [])
 
   if (loading) {

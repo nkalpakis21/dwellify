@@ -9,45 +9,44 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { addDoc, collection, serverTimestamp } from 'firebase/firestore'
-import { initializeFirebase } from '@/app/lib/firebaseClient'
-
-type PropertyFormData = {
-  description: string
-  address: string
-  price: number
-  propertyType: string
-  type: 'SALE' | 'RENT'
-}
+import { IPropertyForm } from '@/app/types/property'
+import { useAuth } from '@/app/lib/AuthContext'
 
 type AddPropertyFormProps = {
   onSuccess?: () => void;
 }
 
 export function AddPropertyForm({ onSuccess }: AddPropertyFormProps) {
-  const { register, handleSubmit, formState: { errors }, control } = useForm<PropertyFormData>()
+  const { register, handleSubmit, formState: { errors } } = useForm<IPropertyForm>()
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const {db} = initializeFirebase();
-
-  const onSubmit = async (data: PropertyFormData) => {
+  const { user } = useAuth();
+  const onSubmit = async (data: IPropertyForm) => {
     setIsSubmitting(true)
+    if(!user) {
+      console.error('Error adding property. User object not set');
+      return;
+    }
     try {
-      const docRef = await addDoc(collection(db, 'properties'), {
-        ...data,
-        price: Number(data.price),
-        listedBy: 'userId', // Replace with actual user ID when auth is implemented
-        createdAt: serverTimestamp(),
-        updatedAt: serverTimestamp(),
-        images: [] // Add image upload functionality later
-      })
-      console.log("Document written with ID: ", docRef.id)
-      onSuccess?.();
-      // Reset form or show success message
-    } catch (e) {
-      console.error("Error adding document: ", e)
-      // Show error message to user
+      const uid = user.uid;
+      const response = await fetch('/api/property', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({...data, userId: uid}),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to add property');
+      }
+
+      if(onSuccess) {
+        onSuccess();
+      }
+    } catch (error) {
+        console.error('Error adding property:', error);
     } finally {
-      setIsSubmitting(false)
+        setIsSubmitting(false)
     }
   }
 
