@@ -1,8 +1,9 @@
 "use client"
 
+import { useState } from 'react'
 import Link from "next/link"
-import { Building, DollarSign, FileText, Home, Menu } from 'lucide-react'
-import { usePathname } from "next/navigation"
+import { Building, DollarSign, FileText, Home, Menu, User, LogOut } from 'lucide-react'
+import { usePathname, useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import {
   Sheet,
@@ -11,11 +12,24 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { cn } from "@/app/lib/utils"
+import { useAuth } from "@/app/lib/AuthContext"
+import { logout } from "@/app/lib/authClient"
 
-export function ToolbarCombined() {
+export function Toolbar() {
   const pathname = usePathname()
+  const router = useRouter()
+  const { user } = useAuth()
   const isDashboard = pathname?.startsWith('/dashboard')
+  const [isLoggingOut, setIsLoggingOut] = useState(false)
 
   const navigation = [
     { name: 'Dashboard', href: '/dashboard', icon: Home },
@@ -23,6 +37,18 @@ export function ToolbarCombined() {
     { name: 'Applications', href: '/dashboard/applications', icon: FileText },
     { name: 'Revenue', href: '/dashboard/revenue', icon: DollarSign },
   ]
+
+  const handleLogout = async () => {
+    setIsLoggingOut(true)
+    try {
+      await logout()
+      router.push('/login')
+    } catch (error) {
+      console.error('Logout failed:', error)
+    } finally {
+      setIsLoggingOut(false)
+    }
+  }
 
   return (
     <header className="bg-white border-b border-gray-200">
@@ -73,15 +99,50 @@ export function ToolbarCombined() {
             <span className="text-xl font-bold text-blue-600">Dwellify</span>
           </Link>
         </div>
-        <nav>
-          <ul className="flex space-x-4">
-            {!isDashboard && (
-              <>
-                <li><Link href="/photos" className="text-blue-600 hover:text-blue-800">Photos</Link></li>
-                <li><Link href="/contact" className="text-blue-600 hover:text-blue-800">Contact</Link></li>
-              </>
-            )}
-          </ul>
+        <nav className="flex items-center space-x-4">
+          {!isDashboard && (
+            <>
+              <Link href="/photos" className="text-blue-600 hover:text-blue-800">Photos</Link>
+              <Link href="/contact" className="text-blue-600 hover:text-blue-800">Contact</Link>
+            </>
+          )}
+          {user ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                  <Avatar className="h-8 w-8">
+                    <AvatarFallback>{user.email?.charAt(0).toUpperCase()}</AvatarFallback>
+                  </Avatar>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-56" align="end" forceMount>
+                <DropdownMenuItem className="flex flex-col items-start">
+                  <div className="text-sm font-medium">{user.email}</div>
+                  <div className="text-xs text-muted-foreground">Manage your account</div>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Link href="/dashboard">Dashboard</Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem 
+                  className="text-red-600"
+                  disabled={isLoggingOut}
+                  onClick={handleLogout}
+                >
+                  <LogOut className="mr-2 h-4 w-4" />
+                  <span>{isLoggingOut ? 'Logging out...' : 'Log out'}</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <Button asChild variant="ghost">
+              <Link href="/login">
+                <User className="mr-2 h-4 w-4" />
+                Sign In
+              </Link>
+            </Button>
+          )}
         </nav>
       </div>
     </header>

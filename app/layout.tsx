@@ -3,7 +3,7 @@
 import './globals.css'
 // import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import { ToolbarCombined } from '@/components/Toolbar'
+import { Toolbar } from '@/components/Toolbar'
 import { AuthProvider } from './lib/AuthContext';
 
 const inter = Inter({ subsets: ['latin'] })
@@ -24,7 +24,7 @@ export default function RootLayout({
       <body className={`${inter.className} h-full`}>
         <AuthProvider>
           <div className="min-h-full flex flex-col">
-            <ToolbarCombined />
+            <Toolbar />
             {children}
           </div>
         </AuthProvider>
