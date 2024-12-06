@@ -1,27 +1,29 @@
 "use client"
 
-// import { collection, getDocs } from 'firebase/firestore'
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { useState } from 'react'
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Building, DollarSign } from 'lucide-react'
+import { Button } from "@/components/ui/button"
+import { Building, DollarSign, Copy, Check } from 'lucide-react'
 import useSWR from 'swr'
 import { fetcher } from '@/app/lib/fetch'
 import { useAuth } from '@/app/lib/AuthContext'
 import { IProperty } from '@/app/types/property'
 
-type Property = {
-  id: string
-  description: string
-  address: string
-  price: number
-  propertyType: string
-  type: 'SALE' | 'RENT'
-}
-
 export function PropertyList() {
-  const {user} = useAuth();
+  const { user } = useAuth();
   const uid = user?.uid || ''
   const { data, isLoading } = useSWR(`/api/users/${uid}/properties`, fetcher)
+  const [copiedId, setCopiedId] = useState<string | null>(null)
+
+  const copyToClipboard = (property: IProperty) => {
+    const refType = property.type.toLowerCase()
+    const url = `${window.location.origin}/apply/${refType}/${property.id}`
+    navigator.clipboard.writeText(url).then(() => {
+      setCopiedId(property.id)
+      setTimeout(() => setCopiedId(null), 2000) // Reset after 2 seconds
+    })
+  }
 
   if (isLoading || !data) {
     return <div className="text-center">Loading properties...</div>
@@ -52,6 +54,25 @@ export function PropertyList() {
               </div>
             </div>
           </CardContent>
+          <CardFooter>
+            <Button 
+              variant="outline" 
+              className="w-full"
+              onClick={() => copyToClipboard(property)}
+            >
+              {copiedId === property.id ? (
+                <>
+                  <Check className="w-4 h-4 mr-2" />
+                  Copied!
+                </>
+              ) : (
+                <>
+                  <Copy className="w-4 h-4 mr-2" />
+                  Copy Application Link
+                </>
+              )}
+            </Button>
+          </CardFooter>
         </Card>
       ))}
     </div>

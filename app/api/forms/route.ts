@@ -6,10 +6,11 @@ export async function POST(request: Request) {
     
     try {
         // Parse form data from the request
-        const formData: FormData = await request.json();
+        const {formData, refId, refType} = await request.json();
 
+        // need to do if checking here for uab
         // Add session data to Firestore and get session ID hash
-        const sessionIdHash = await addSessionWithRandomHash(formData);
+        const sessionIdHash = await addSessionWithRandomHash({...formData, refId, refType});
         
         try {
             // Extracting the request body

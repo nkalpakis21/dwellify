@@ -3,6 +3,7 @@ import { collection, addDoc, getDocs, query, where } from 'firebase/firestore';
 import { IProperty, IPropertyFormRequest } from '../types/property';
 import { initializeFirebase } from './firebaseClient';
 import { serverTimestamp } from 'firebase/firestore'
+import { IApplication } from '../types/application';
 
 const SESSIONS_COLLECTION = 'sessions';
 const PROPERTIES_COLLECTION = 'properties';
@@ -22,9 +23,9 @@ export const addDocumentToFirestore = async (collectionName: string, data: Recor
     }
 };
 
-export const addSessionWithRandomHash = async (data: FormData): Promise<string> => {
+export const addSessionWithRandomHash = async (appplication: IApplication): Promise<string> => {
     const sessionIdHash = Math.random().toString(36).substring(2, 15); // Generates a random hash
-    const sessionData = { ...data, session_id: sessionIdHash };
+    const sessionData = { ...appplication, session_id: sessionIdHash };
     await addDocumentToFirestore(SESSIONS_COLLECTION, sessionData);
     console.log('Session added with session_id:', sessionData.session_id);
     return sessionIdHash;
@@ -61,6 +62,35 @@ export const getPropertiesByUser = async (userId: string): Promise<IProperty[]> 
         });
 
         return properties;
+    } catch (error) {
+        console.error('Error getting properties by userId:', error);
+        throw new Error('Failed to retrieve properties');
+    }
+};
+
+// Function to get all applications by userId
+export const getApplicationsByProperty = async (propertyId: string): Promise<IApplication[]> => {
+    const { db } = initializeFirebase();
+    try {
+        // Query Firestore to get applications where propertyId matches
+        const sessionsRef = collection(db, SESSIONS_COLLECTION);
+        const q = query(sessionsRef, where('refId', '==', propertyId));
+        const querySnapshot = await getDocs(q);
+
+        // Check if there are any documents
+        if (querySnapshot.empty) {
+            return [];
+        }
+
+        // Map the documents to an array of properties
+        const applications: IApplication[] = querySnapshot.docs.map((doc) => {
+            return {
+                id: doc.id,
+                ...doc.data(),
+            } as unknown as IApplication; // Assuming the document data matches your IProperty structure
+        });
+
+        return applications;
     } catch (error) {
         console.error('Error getting properties by userId:', error);
         throw new Error('Failed to retrieve properties');

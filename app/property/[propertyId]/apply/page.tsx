@@ -9,12 +9,12 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Loader2 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { FormData } from '@/app/types/types';
+import { IApplicationForm } from '@/app/types/application';
 
 export default function ApplyForm() {
     const router = useRouter();
     const [isLoading, setIsLoading] = useState<boolean>(false)
-    const [formData, setFormData] = useState<FormData>({
+    const [formData, setFormData] = useState<IApplicationForm>({
       full_name: '',
       email: '',
       phone_number: '',
