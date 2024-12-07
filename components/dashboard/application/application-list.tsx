@@ -1,5 +1,8 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { Copy, Check } from 'lucide-react'
+import { useState } from 'react'
 
 type Application = {
   id: string
@@ -24,9 +27,16 @@ type ApplicationListProps = {
 }
 
 export function ApplicationList({ applications }: ApplicationListProps) {
-  if(!applications) {
-    return (null)
+  const [copiedId, setCopiedId] = useState<string | null>(null)
+
+  const copyFeedbackLink = (application: Application) => {
+    const feedbackUrl = `${window.location.origin}/feedback/application/${application.id}`
+    navigator.clipboard.writeText(feedbackUrl).then(() => {
+      setCopiedId(application.id)
+      setTimeout(() => setCopiedId(null), 2000) // Reset after 2 seconds
+    })
   }
+
   return (
     <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
       {applications.map((application) => (
@@ -51,6 +61,25 @@ export function ApplicationList({ applications }: ApplicationListProps) {
             <div className="mt-4 pt-4 border-t">
               <p className="text-sm"><strong>Applied on:</strong> {new Date(application.createdAt).toLocaleDateString()}</p>
             </div>
+            <CardFooter>
+              <Button 
+                variant="outline" 
+                className="w-full"
+                onClick={() => copyFeedbackLink(application)}
+              >
+                {copiedId === application.id ? (
+                  <>
+                    <Check className="w-4 h-4 mr-2" />
+                    Copied!
+                  </>
+                ) : (
+                  <>
+                    <Copy className="w-4 h-4 mr-2" />
+                    Copy Feedback Link
+                  </>
+                )}
+              </Button>
+            </CardFooter>
           </CardContent>
         </Card>
       ))}

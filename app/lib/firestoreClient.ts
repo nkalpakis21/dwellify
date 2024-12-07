@@ -1,9 +1,9 @@
 // firestoreClient.ts
-import { collection, addDoc, getDocs, query, where } from 'firebase/firestore';
+import { collection, addDoc, getDocs, query, where, doc, getDoc } from 'firebase/firestore';
 import { IProperty, IPropertyFormRequest } from '../types/property';
 import { initializeFirebase } from './firebaseClient';
 import { serverTimestamp } from 'firebase/firestore'
-import { IApplication } from '../types/application';
+import { IApplication, IFeedbackFormRequest } from '../types/application';
 
 const SESSIONS_COLLECTION = 'sessions';
 const PROPERTIES_COLLECTION = 'properties';
@@ -95,4 +95,52 @@ export const getApplicationsByProperty = async (propertyId: string): Promise<IAp
         console.error('Error getting properties by userId:', error);
         throw new Error('Failed to retrieve properties');
     }
+}
+
+/**
+ * Fetches an application from Firestore by its ID.
+ * @param {string} appId - The ID of the application document.
+ * @returns {Promise<Object>} - The application data, or null if not found.
+ */
+export const getApplicationById = async (applicationId: string): Promise<IApplication | null> => {
+    const { db } = initializeFirebase();
+    
+    try {
+        const applicationsRef = collection(db, SESSIONS_COLLECTION); // Reference to applications collection
+        const applicationDoc = doc(applicationsRef, applicationId); // Reference to the specific document
+        const applicationSnapshot = await getDoc(applicationDoc); // Fetch the document snapshot
+
+        // Check if the document exists
+        if (!applicationSnapshot.exists()) {
+            console.log('Application not found');
+            return null;
+        }
+
+        // Return the application data as an IApplication object
+        return {
+            id: applicationSnapshot.id,
+            ...applicationSnapshot.data(),
+        } as unknown as IApplication;
+        
+    } catch (error) {
+        console.error('Error fetching application by ID:', error);
+        throw new Error('Failed to retrieve application');
+    }
 };
+
+/**
+ * Adds a feedback document to the feedback collection in Firestore.
+ * @param feedbackRequest - The feedback request data.
+ * @returns A Promise<void> indicating the operation is complete.
+ */
+// Firestore function to add feedback using helper function
+export const addFeedback = async (feedbackRequest: IFeedbackFormRequest): Promise<void> => {
+    try {
+      // Use the helper function to add the feedback to Firestore
+      await addDocumentToFirestore('feedback', feedbackRequest);
+      console.log('Feedback successfully added');
+    } catch (error) {
+      console.error('Error adding feedback:', error);
+      throw new Error('Failed to add feedback');
+    }
+  };

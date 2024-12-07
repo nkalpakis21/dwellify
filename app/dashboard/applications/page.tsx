@@ -6,6 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Label } from "@/components/ui/label"
 import { useAuth } from '@/app/lib/AuthContext'
 import { fetcher } from '@/app/lib/fetch'
+
 import { DashboardHeader } from '@/components/dashboard/header'
 import { IProperty } from '@/app/types/property'
 import { IApplication } from '@/app/types/application'
@@ -15,7 +16,7 @@ export default function ApplicationsPage() {
   const { user } = useAuth();
   const uid = user?.uid || ''
   const [selectedProperty, setSelectedProperty] = useState<string | null>(null)
-console.log(selectedProperty)
+  
   const { data, isLoading: isLoadingProperties } = useSWR(
     `/api/users/${uid}/application/all`,
     fetcher
