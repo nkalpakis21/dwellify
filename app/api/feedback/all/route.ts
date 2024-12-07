@@ -1,4 +1,4 @@
-import { getAllFeedback, getFeedbackByApplication } from "@/app/lib/firestoreClient";
+import { getAllFeedback } from "@/app/lib/firestoreClient";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest, { params }: { params: Promise<{ formId: string }> }) {

@@ -102,7 +102,7 @@ export function Toolbar() {
         <nav className="flex items-center space-x-4">
           {!isDashboard && (
             <>
-              <Link href="/photos" className="text-blue-600 hover:text-blue-800">Photos</Link>
+              {/* <Link href="/photos" className="text-blue-600 hover:text-blue-800">Photos</Link> */}
               <Link href="/contact" className="text-blue-600 hover:text-blue-800">Contact</Link>
             </>
           )}

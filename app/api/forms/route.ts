@@ -14,7 +14,8 @@ export async function POST(request: Request) {
         
         try {
             // Extracting the request body
-            const success_url = `${process.env.BASE_URL}/schedule?sessionID=${sessionIdHash}`;
+            // const success_url = `${process.env.BASE_URL}/schedule?sessionID=${sessionIdHash}`;
+             const success_url = `${process.env.BASE_URL}/apply/${refType}/${refId}/confirmation`;
             const cancel_url = `${process.env.BASE_URL}/apply/${refType}/${refId}?sessionID=${sessionIdHash}`;
             const SCHEDULE_AMOUNT = 500
             // Create Stripe Checkout session
@@ -25,7 +26,7 @@ export async function POST(request: Request) {
                   price_data: {
                     currency: 'usd',
                     product_data: {
-                      name: '1130 S Side Ave Pittsburgh, PA 15212',
+                      name: 'Application',
                     },
                     unit_amount: SCHEDULE_AMOUNT, // Amount in cents
                   },
