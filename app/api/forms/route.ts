@@ -15,7 +15,7 @@ export async function POST(request: Request) {
         try {
             // Extracting the request body
             const success_url = `${process.env.BASE_URL}/schedule?sessionID=${sessionIdHash}`;
-            const cancel_url = `${process.env.BASE_URL}/apply?sessionID=${sessionIdHash}`;
+            const cancel_url = `${process.env.BASE_URL}/apply/${refType}/${refId}?sessionID=${sessionIdHash}`;
             const SCHEDULE_AMOUNT = 500
             // Create Stripe Checkout session
             const session = await stripe.checkout.sessions.create({
