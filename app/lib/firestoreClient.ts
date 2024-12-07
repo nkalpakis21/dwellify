@@ -1,4 +1,3 @@
-// firestoreClient.ts
 import { collection, addDoc, getDocs, query, where, doc, getDoc } from 'firebase/firestore';
 import { IProperty, IPropertyFormRequest } from '../types/property';
 import { initializeFirebase } from './firebaseClient';
@@ -144,3 +143,103 @@ export const addFeedback = async (feedbackRequest: IFeedbackFormRequest): Promis
       throw new Error('Failed to add feedback');
     }
   };
+
+  /**
+ * Fetches all feedback from the feedback collection.
+ * @returns {Promise<IFeedbackFormRequest[]>} - A list of all feedback.
+ */
+export const getAllFeedback = async (): Promise<IFeedbackFormRequest[]> => {
+    const { db } = initializeFirebase();
+    
+    try {
+        const feedbackRef = collection(db, 'feedback');
+        const feedbackSnapshot = await getDocs(feedbackRef);
+        
+        // If no documents exist
+        if (feedbackSnapshot.empty) {
+            return [];
+        }
+
+        // Map documents to feedback objects
+        const feedbackList: IFeedbackFormRequest[] = feedbackSnapshot.docs.map((doc) => {
+            return {
+                id: doc.id,
+                ...doc.data(),
+            } as unknown as IFeedbackFormRequest;
+        });
+
+        return feedbackList;
+    } catch (error) {
+        console.error('Error fetching all feedback:', error);
+        throw new Error('Failed to retrieve feedback');
+    }
+};
+
+/**
+ * Fetches all feedback for a specific application.
+ * @param {string} applicationId - The ID of the application.
+ * @returns {Promise<IFeedbackFormRequest[]>} - A list of feedback related to the application.
+ */
+export const getFeedbackByApplication = async (applicationId: string): Promise<IFeedbackFormRequest[]> => {
+    const { db } = initializeFirebase();
+    
+    try {
+        const feedbackRef = collection(db, 'feedback');
+        const q = query(feedbackRef, where('refId', '==', applicationId)); // Query feedback by application ID
+        const feedbackSnapshot = await getDocs(q);
+
+        // If no feedback exists for this application
+        if (feedbackSnapshot.empty) {
+            return [];
+        }
+
+        // Map documents to feedback objects
+        const feedbackList: IFeedbackFormRequest[] = feedbackSnapshot.docs.map((doc) => {
+            return {
+                id: doc.id,
+                ...doc.data(),
+            } as unknown as IFeedbackFormRequest;
+        });
+
+        return feedbackList;
+    } catch (error) {
+        console.error('Error fetching feedback for application:', error);
+        throw new Error('Failed to retrieve feedback');
+    }
+};
+
+/**
+ * Fetches all feedback for a specific property by first fetching all applications,
+ * and then retrieving feedback for each application.
+ * @param {string} propertyId - The ID of the property.
+ * @returns {Promise<IFeedbackFormRequest[]>} - A list of all feedback related to the property.
+ */
+export const getFeedbackByProperty = async (propertyId: string): Promise<IFeedbackFormRequest[]> => {
+    
+    try {
+        // Step 1: Get all applications related to the property
+        const applications = await getApplicationsByProperty(propertyId);
+
+        if (applications.length === 0) {
+            return [];
+        }
+
+        // Step 2: For each application, get related feedback
+        const feedbackPromises = applications.map((application) =>
+            getFeedbackByApplication(application.id)
+        );
+
+        // Resolve all feedback promises
+        const allFeedback = await Promise.all(feedbackPromises);
+
+        // Flatten the nested arrays of feedback
+        const feedbackList = allFeedback.flat();
+
+        return feedbackList;
+    } catch (error) {
+        console.error('Error fetching feedback for property:', error);
+        throw new Error('Failed to retrieve feedback');
+    }
+};
+
+

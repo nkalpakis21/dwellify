@@ -11,12 +11,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
+import { DashboardHeader } from '@/components/dashboard/header'
 import { AddPropertyForm } from './AddProperty'
 import { PropertyList } from './PropertyList'
-import { DashboardHeader } from '@/components/dashboard/header'
 
 export default function PropertiesPage() {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [refreshTrigger, setRefreshTrigger] = useState(0)
 
   return (
     <div className="space-y-8">
@@ -38,12 +39,15 @@ export default function PropertiesPage() {
                 Fill in the details of the new property you want to add.
               </DialogDescription>
             </DialogHeader>
-            <AddPropertyForm onSuccess={() => setIsDialogOpen(false)} />
+            <AddPropertyForm onSuccess={() => {
+              setIsDialogOpen(false)
+              setRefreshTrigger(prev => prev + 1)
+            }} />
           </DialogContent>
         </Dialog>
       </div>
       <div className="container mx-auto px-4">
-        <PropertyList />
+        <PropertyList key={refreshTrigger} />
       </div>
     </div>
   )
