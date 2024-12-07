@@ -22,7 +22,7 @@ export default function ApplicationSuccessPage() {
             Your application has been successfully submitted. We appreciate your interest and will review your application as soon as possible.
           </p>
           <p className="text-md text-gray-600">
-            If you have any questions or need to provide additional information, please don't hesitate to contact us.
+            If you have any questions or need to provide additional information, please don&apos;t hesitate to contact us.
           </p>
         </CardContent>
         <CardFooter className="flex justify-center">
