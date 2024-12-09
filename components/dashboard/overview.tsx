@@ -17,7 +17,7 @@ export function DashboardOverview() {
   )
 
   const { data: applicationsData, error: applicationsError } = useSWR(
-    uid ? `/api/users/${uid}/application/all` : null,
+    uid ? `/api/application/user/${uid}/all` : null,
     fetcher
   )
 

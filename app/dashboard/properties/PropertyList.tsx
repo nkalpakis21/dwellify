@@ -55,10 +55,9 @@ export function PropertyList() {
   const { data, isLoading } = useSWR<Property[]>(`/api/users/${uid}/properties`, fetcher)
   const [copiedId, setCopiedId] = useState<string | null>(null)
   const [expandedProperty, setExpandedProperty] = useState<string | null>(null)
-
+  const REF_TYPE = 'property';
   const copyToClipboard = (property: Property) => {
-    const refType = property.type.toLowerCase()
-    const url = `${window.location.origin}/apply/${refType}/${property.id}`
+    const url = `${process.env.NEXT_PUBLIC_BASE_URL}/apply/${REF_TYPE}/${property.id}`
     navigator.clipboard.writeText(url).then(() => {
       setCopiedId(property.id)
       setTimeout(() => setCopiedId(null), 2000) // Reset after 2 seconds

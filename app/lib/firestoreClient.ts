@@ -67,6 +67,61 @@ export const getPropertiesByUser = async (userId: string): Promise<IProperty[]> 
     }
 };
 
+export const getApplicationByRefId = async (refId: string): Promise<IApplication[]> => {
+    const { db } = initializeFirebase();
+    try {
+        // Query Firestore to get applications where propertyId matches
+        const sessionsRef = collection(db, SESSIONS_COLLECTION);
+        const q = query(sessionsRef, where('refId', '==', refId));
+        const querySnapshot = await getDocs(q);
+
+        // Check if there are any documents
+        if (querySnapshot.empty) {
+            return [];
+        }
+
+        // Map the documents to an array of properties
+        const applications: IApplication[] = querySnapshot.docs.map((doc) => {
+            return {
+                id: doc.id,
+                ...doc.data(),
+            } as unknown as IApplication; // Assuming the document data matches your IProperty structure
+        });
+
+        return applications;
+    } catch (error) {
+        console.error('Error getting properties by userId:', error);
+        throw new Error('Failed to retrieve properties');
+    }
+}
+
+export const getApplicationByUser = async (userId: string): Promise<IApplication[]> => {
+    const { db } = initializeFirebase();
+    try {
+        // Query Firestore to get applications where propertyId matches
+        const sessionsRef = collection(db, SESSIONS_COLLECTION);
+        const q = query(sessionsRef, where('refId', '==', userId));
+        const querySnapshot = await getDocs(q);
+
+        // Check if there are any documents
+        if (querySnapshot.empty) {
+            return [];
+        }
+
+        // Map the documents to an array of properties
+        const applications: IApplication[] = querySnapshot.docs.map((doc) => {
+            return {
+                id: doc.id,
+                ...doc.data(),
+            } as unknown as IApplication; // Assuming the document data matches your IProperty structure
+        });
+
+        return applications;
+    } catch (error) {
+        console.error('Error getting properties by userId:', error);
+        throw new Error('Failed to retrieve properties');
+    }
+}
 // Function to get all applications by userId
 export const getApplicationsByProperty = async (propertyId: string): Promise<IApplication[]> => {
     const { db } = initializeFirebase();

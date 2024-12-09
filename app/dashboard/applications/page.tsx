@@ -18,7 +18,7 @@ export default function ApplicationsPage() {
   const [selectedProperty, setSelectedProperty] = useState<string | null>(null)
   
   const { data, isLoading: isLoadingProperties } = useSWR(
-    `/api/users/${uid}/application/all`,
+    `/api/application/user/${uid}/all`,
     fetcher
   )
 
