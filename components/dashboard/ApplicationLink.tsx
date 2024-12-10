@@ -10,10 +10,10 @@ export function CopyApplicationLink() {
   const [copied, setCopied] = useState(false)
   const [applicationUrl, setApplicationUrl] = useState('')
   const { user } = useAuth()
-  const REF_TYPE = 'user';
+
   useEffect(() => {
     if (user) {
-      setApplicationUrl(`${process.env.NEXT_PUBLIC_BASE_URL}/apply/${REF_TYPE}/${user.uid}`)
+      setApplicationUrl(`${window.location.origin}/apply/user/${user.uid}`)
     }
   }, [user])
 
@@ -38,20 +38,25 @@ export function CopyApplicationLink() {
       <CardHeader>
         <CardTitle>Application Link</CardTitle>
       </CardHeader>
-      <CardContent className="flex items-center space-x-2">
-        <Button onClick={copyToClipboard} variant="outline" disabled={!applicationUrl}>
-          {copied ? (
-            <>
-              <Check className="mr-2 h-4 w-4" />
-              Copied
-            </>
-          ) : (
-            <>
-              <Copy className="mr-2 h-4 w-4" />
-              Copy Application Link
-            </>
-          )}
-        </Button>
+      <CardContent className="space-y-4">
+        <p className="text-sm text-muted-foreground">
+          This link is for users interested in buying or renting your property. Share it with potential applicants.
+        </p>
+        <div className="flex items-center space-x-2">
+          <Button onClick={copyToClipboard} variant="outline" disabled={!applicationUrl}>
+            {copied ? (
+              <>
+                <Check className="mr-2 h-4 w-4" />
+                Copied
+              </>
+            ) : (
+              <>
+                <Copy className="mr-2 h-4 w-4" />
+                Copy Property Application Link
+              </>
+            )}
+          </Button>
+        </div>
       </CardContent>
     </Card>
   )
