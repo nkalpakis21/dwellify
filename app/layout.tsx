@@ -18,7 +18,7 @@ export const metadata = {
     siteName: 'Dwellify',
     images: [
       {
-        url: 'https://dwellify.xyz/share_image.png',
+        url: 'https://dwellify.xyz/share_image.jpg',
         width: 1200,
         height: 630,
       },
@@ -29,7 +29,7 @@ export const metadata = {
     site: '@dwellify',
     title: 'Dwellify | Streamline your property management with Dwellify',
     description: 'Streamline your property management with Dwellify',
-    image: 'https://dwellify.xyz/share_image.png',
+    image: 'https://dwellify.xyz/share_image.jpg',
   },
 };
 
