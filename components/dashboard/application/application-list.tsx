@@ -18,7 +18,7 @@ type Application = {
   credit_check_passed: boolean
   criminal_record_status: string
   evicted_status: string
-  createdAt: string
+  createdAt: {seconds: number, nanoseconds: number}
   propertyId: string
 }
 
@@ -59,7 +59,7 @@ export function ApplicationList({ applications }: ApplicationListProps) {
               <p className="text-sm"><strong>Move-in Date:</strong> {application.move_in_date}</p>
             </div>
             <div className="mt-4 pt-4 border-t">
-              <p className="text-sm"><strong>Applied on:</strong> {new Date(application.createdAt).toLocaleDateString()}</p>
+              <p className="text-sm"><strong>Applied on:</strong> {new Date(application.createdAt.seconds * 1000).toLocaleDateString()}</p>
             </div>
             <CardFooter>
               <Button 
