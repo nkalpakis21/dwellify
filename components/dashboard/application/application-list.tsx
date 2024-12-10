@@ -44,7 +44,7 @@ export function ApplicationList({ applications }: ApplicationListProps) {
           <CardHeader>
             <CardTitle className="flex justify-between items-center">
               <span className="truncate">{application.full_name}</span>
-              <Badge variant={application.credit_check_passed ? 'default' : 'destructive'}>
+              <Badge variant={application.credit_check_passed ? 'secondary' : 'destructive'}>
                 {application.credit_check_passed ? 'Passed' : 'Failed'}
               </Badge>
             </CardTitle>
@@ -61,10 +61,10 @@ export function ApplicationList({ applications }: ApplicationListProps) {
             <div className="mt-4 pt-4 border-t">
               <p className="text-sm"><strong>Applied on:</strong> {new Date(application.createdAt.seconds * 1000).toLocaleDateString()}</p>
             </div>
-            <CardFooter>
+            <CardFooter className="p-0 w-full">
               <Button 
                 variant="outline" 
-                className="w-full"
+                className="w-full h-10 px-6 my-4"
                 onClick={() => copyFeedbackLink(application)}
               >
                 {copiedId === application.id ? (
