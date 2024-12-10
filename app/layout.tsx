@@ -14,11 +14,11 @@ export const metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://dwellify.com',
+    url: 'https://dwellify.xyz',
     siteName: 'Dwellify',
     images: [
       {
-        url: 'https://dwellify.com/share_image.png',
+        url: 'https://dwellify.xyz/share_image.png',
         width: 1200,
         height: 630,
       },
@@ -29,7 +29,7 @@ export const metadata = {
     site: '@dwellify',
     title: 'Dwellify | Streamline your property management with Dwellify',
     description: 'Streamline your property management with Dwellify',
-    image: 'https://dwellify.com/share_image.png',
+    image: 'https://dwellify.xyz/share_image.png',
   },
 };
 
