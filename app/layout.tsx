@@ -22,6 +22,11 @@ export const metadata = {
         width: 1200,
         height: 630,
       },
+      {
+        url: 'https://dwellify.xyz/twitter_share_image.jpg',
+        width: 1200,
+        height: 628,
+      },
     ],
   },
   x: {
