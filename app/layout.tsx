@@ -29,7 +29,7 @@ export const metadata = {
     site: '@dwellify', // Replace with your actual X account handle once created
     title: 'Dwellify | Streamline your property management with Dwellify',
     description: 'Streamline your property management with Dwellify',
-    image: 'https://dwellify.xyz/twitter_share_image.png',
+    image: 'https://dwellify.xyz/twitter_share_image.jpg',
   },
 };
 
