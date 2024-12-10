@@ -13,7 +13,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ refT
         let data;
         switch (refType) {
             case 'user':
-                data = await userService.getApplicationsByUser(refId);
+                data = await userService.getDashboardApplications(refId);
                 return NextResponse.json(data); // Return response immediately for 'user'
             
             case 'property':

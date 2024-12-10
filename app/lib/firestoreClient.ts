@@ -95,7 +95,7 @@ export const getApplicationByRefId = async (refId: string): Promise<IApplication
     }
 }
 
-export const getApplicationByUser = async (userId: string): Promise<IApplication[]> => {
+export const getApplicationsByUser = async (userId: string): Promise<IApplication[]> => {
     const { db } = initializeFirebase();
     try {
         // Query Firestore to get applications where propertyId matches

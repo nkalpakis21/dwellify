@@ -1,7 +1,8 @@
-import { getApplicationsByProperty, getPropertiesByUser } from "@/app/lib/firestoreClient";
+import { getApplicationsByProperty, getApplicationsByUser, getPropertiesByUser } from "@/app/lib/firestoreClient";
+import { IApplication } from "@/app/types/application";
 
 const userService = {
-    async getApplicationsByUser(userId: string) {
+    async getDashboardApplications(userId: string) {
         if (!userId) {
             throw new Error('User ID is required');
         }
@@ -19,12 +20,13 @@ const userService = {
                 };
             }));
 
+            const applicationsFromUserId: Array<IApplication> = await getApplicationsByUser(userId);
+
             // Aggregate all applications
             const allApplications = propertiesWithApplications.flatMap(property => property.applications);
-
             return {
                 properties: propertiesWithApplications,
-                applications: allApplications
+                applications: [...allApplications, ...applicationsFromUserId]
             };
         } catch (error) {
             console.error('Error fetching properties and applications:', error);
