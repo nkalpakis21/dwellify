@@ -9,6 +9,30 @@ import { Head } from 'next/document';
 
 const inter = Inter({ subsets: ['latin'] })
 
+export const metadata = {
+  title: 'Dwellify | Streamline your property management with Dwellify',
+  description: 'Streamline your property management with Dwellify',
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    url: 'https://dwellify.com',
+    siteName: 'Dwellify',
+    images: [
+      {
+        url: 'https://dwellify.com/og-default.png',
+        width: 1200,
+        height: 630,
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    site: '@dwellify',
+    title: 'Dwellify | Streamline your property management with Dwellify',
+    description: 'Streamline your property management with Dwellify',
+    image: 'https://dwellify.com/og-default.png',
+  },
+};
 // since client component because of FB we cant have meta data. need to move to server
 // export const metadata: Metadata = {
 //   title: 'Dwellify - Find Your Perfect Home',
